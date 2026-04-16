@@ -1,18 +1,686 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Home Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bickkky.uk | Enterprise IT Dashboard</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#121b2e;
+      --panel-2:#18243d;
+      --text:#e8eefc;
+      --muted:#aab7d6;
+      --accent:#4da3ff;
+      --accent-2:#7c5cff;
+      --success:#2ecc71;
+      --border:rgba(255,255,255,0.08);
+      --shadow:0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    body.light{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --panel-2:#eef3fb;
+      --text:#172033;
+      --muted:#5c6882;
+      --accent:#0d6efd;
+      --accent-2:#6f42c1;
+      --success:#198754;
+      --border:rgba(0,0,0,0.08);
+      --shadow:0 10px 30px rgba(13,110,253,0.08);
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(77,163,255,0.18), transparent 30%),
+        radial-gradient(circle at top right, rgba(124,92,255,0.18), transparent 25%),
+        var(--bg);
+      color:var(--text);
+      transition:background .25s ease,color .25s ease;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      backdrop-filter:blur(12px);
+      background:rgba(11,18,32,0.7);
+      border-bottom:1px solid var(--border);
+    }
+
+    body.light .topbar{
+      background:rgba(255,255,255,0.75);
+    }
+
+    .nav{
+      max-width:1200px;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 20px;
+      gap:20px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:700;
+      letter-spacing:.4px;
+    }
+
+    .brand-badge{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      display:grid;
+      place-items:center;
+      box-shadow:var(--shadow);
+      color:white;
+      font-size:18px;
+      font-weight:700;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+
+    .nav-links a{
+      color:var(--text);
+      text-decoration:none;
+      font-size:14px;
+      opacity:.9;
+    }
+
+    .nav-links a:hover{
+      color:var(--accent);
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .btn{
+      border:none;
+      border-radius:10px;
+      padding:11px 16px;
+      cursor:pointer;
+      font-weight:700;
+      text-decoration:none;
+      display:inline-block;
+      transition:transform .15s ease, opacity .2s ease, background .2s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      opacity:.95;
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      color:white;
+      box-shadow:var(--shadow);
+    }
+
+    .btn-secondary{
+      background:var(--panel);
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+
+    .theme-toggle{
+      background:var(--panel);
+      color:var(--text);
+      border:1px solid var(--border);
+      width:44px;
+      height:44px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:18px;
+    }
+
+    .hero{
+      max-width:1200px;
+      margin:0 auto;
+      padding:60px 20px 30px;
+      display:grid;
+      grid-template-columns:1.3fr .9fr;
+      gap:28px;
+      align-items:center;
+    }
+
+    .hero-copy h1{
+      font-size:50px;
+      line-height:1.05;
+      margin:0 0 18px;
+    }
+
+    .hero-copy .sub{
+      font-size:18px;
+      color:var(--muted);
+      max-width:760px;
+      line-height:1.7;
+      margin-bottom:22px;
+    }
+
+    .hero-glow{
+      display:inline-block;
+      padding:7px 12px;
+      border:1px solid rgba(77,163,255,0.35);
+      border-radius:999px;
+      color:#d9e7ff;
+      background:rgba(77,163,255,0.08);
+      font-size:13px;
+      margin-bottom:18px;
+      animation:pulse 2.2s infinite;
+    }
+
+    body.light .hero-glow{
+      color:#0d3f8a;
+    }
+
+    @keyframes pulse{
+      0%{box-shadow:0 0 0 0 rgba(77,163,255,0.35);}
+      70%{box-shadow:0 0 0 16px rgba(77,163,255,0);}
+      100%{box-shadow:0 0 0 0 rgba(77,163,255,0);}
+    }
+
+    .hero-stats{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-top:24px;
+    }
+
+    .stat{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px 18px;
+      min-width:155px;
+      box-shadow:var(--shadow);
+    }
+
+    .stat h3{
+      margin:0;
+      font-size:25px;
+    }
+
+    .stat p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .login-panel{
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:24px;
+      box-shadow:var(--shadow);
+    }
+
+    .login-panel h3{
+      margin-top:0;
+      margin-bottom:8px;
+      font-size:24px;
+    }
+
+    .login-panel p{
+      color:var(--muted);
+      margin-top:0;
+      margin-bottom:18px;
+      line-height:1.6;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(46,204,113,0.12);
+      color:#7ef0ab;
+      border:1px solid rgba(46,204,113,0.3);
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:13px;
+      margin-bottom:14px;
+    }
+
+    body.light .status-pill{
+      color:#146c43;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      background:var(--success);
+      border-radius:50%;
+      box-shadow:0 0 12px var(--success);
+    }
+
+    .fake-login{
+      display:grid;
+      gap:12px;
+      margin-top:10px;
+    }
+
+    .field{
+      background:rgba(255,255,255,0.04);
+      border:1px solid var(--border);
+      color:var(--text);
+      border-radius:12px;
+      padding:13px 14px;
+      font-size:14px;
+    }
+
+    body.light .field{
+      background:#fff;
+    }
+
+    .section{
+      max-width:1200px;
+      margin:0 auto;
+      padding:30px 20px;
+    }
+
+    .section-title{
+      font-size:32px;
+      margin:0 0 10px;
+    }
+
+    .section-sub{
+      color:var(--muted);
+      margin:0 0 24px;
+      line-height:1.7;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+    }
+
+    .card{
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:22px;
+      box-shadow:var(--shadow);
+      transition:transform .2s ease, border-color .2s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-4px);
+      border-color:rgba(77,163,255,0.4);
+    }
+
+    .icon{
+      font-size:28px;
+      margin-bottom:12px;
+    }
+
+    .card h3{
+      margin:0 0 8px;
+      font-size:20px;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    .topology{
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:26px;
+      box-shadow:var(--shadow);
+      overflow:auto;
+    }
+
+    .topology pre{
+      margin:0;
+      font-size:15px;
+      line-height:1.7;
+      color:var(--text);
+      white-space:pre-wrap;
+      font-family:Consolas, monospace;
+    }
+
+    .badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .badge{
+      background:var(--panel);
+      border:1px solid var(--border);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+    }
+
+    .checklist{
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .checklist ul{
+      margin:0;
+      padding-left:18px;
+      line-height:1.9;
+      color:var(--muted);
+    }
+
+    .github-box{
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .github-badge{
+      display:inline-block;
+      background:#24292f;
+      color:#fff;
+      border-radius:999px;
+      padding:8px 14px;
+      font-size:13px;
+      margin-bottom:12px;
+    }
+
+    .ssl-note{
+      margin-top:16px;
+      font-size:14px;
+      color:var(--muted);
+      border-left:4px solid var(--accent);
+      padding-left:12px;
+    }
+
+    footer{
+      max-width:1200px;
+      margin:30px auto 50px;
+      padding:20px;
+      color:var(--muted);
+      text-align:center;
+      border-top:1px solid var(--border);
+    }
+
+    @media (max-width: 980px){
+      .hero,
+      .split{
+        grid-template-columns:1fr;
+      }
+      .grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+      .hero-copy h1{
+        font-size:40px;
+      }
+    }
+
+    @media (max-width: 640px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+      .nav{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+      .hero-copy h1{
+        font-size:32px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to My Site</h1>
-    
-    <p>Hello, my name is Bikramjit Singh. This is my first website created using GitHub Pages. 
-    This site is made for my lab assignment and shows a simple multi-page website.</p>
+  <div class="topbar">
+    <div class="nav">
+      <div class="brand">
+        <div class="brand-badge">B</div>
+        <div>
+          <div>bickkky.uk</div>
+          <small style="color:var(--muted);font-weight:400;">Enterprise Infrastructure Portal</small>
+        </div>
+      </div>
 
-    <p>On the next page, I will share one of my interests.</p>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#services">Services</a>
+        <a href="#topology">Topology</a>
+        <a href="#github">GitHub</a>
+        <a href="#security">Security</a>
+      </div>
 
-    <a href="hobby.html">Go to My Topic Page</a>
+      <div class="actions">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">☾</button>
+        <a class="btn btn-primary" href="#github">View Project</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="hero" id="overview">
+    <div class="hero-copy">
+      <div class="hero-glow">Live Infrastructure Dashboard • IIS + DNS + Active Directory</div>
+      <h1>Modern School IT Platform for <span style="color:var(--accent);">bickkky.uk</span></h1>
+      <p class="sub">
+        This portal demonstrates a complete enterprise lab deployment with Domain Controllers,
+        File Services, Web Hosting, VLAN segmentation, secure firewall integration, and client
+        workstation access across Students, Staff, and Instructors.
+      </p>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a class="btn btn-primary" href="#services">Explore Services</a>
+        <a class="btn btn-secondary" href="#topology">View Network Topology</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <h3>5+</h3>
+          <p>Core infrastructure services</p>
+        </div>
+        <div class="stat">
+          <h3>4</h3>
+          <p>User departments managed</p>
+        </div>
+        <div class="stat">
+          <h3>100%</h3>
+          <p>Domain-integrated authentication</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-panel">
+      <div class="status-pill"><span class="dot"></span> System operational</div>
+      <h3>Secure Access Portal</h3>
+      <p>
+        Active Directory authentication, Group Policy drive mapping, DNS-based access,
+        and IIS web publishing are integrated into this lab environment.
+      </p>
+
+      <div class="fake-login">
+        <div class="field">Username: school\student1</div>
+        <div class="field">Department: Students</div>
+        <div class="field">Mapped Drive: S:\ Students Drive</div>
+        <div class="field">DNS Resolution: bickkky.uk → Web Server</div>
+      </div>
+
+      <div class="ssl-note">
+        SSL-ready deployment design prepared for future HTTPS publishing through firewall NAT and external DNS.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="services">
+    <h2 class="section-title">Configured Infrastructure Services</h2>
+    <p class="section-sub">
+      The environment is built to reflect real-world enterprise administration with centralized identity,
+      segmented networking, secure server roles, and client automation.
+    </p>
+
+    <div class="grid">
+      <div class="card">
+        <div class="icon">🖥</div>
+        <h3>Active Directory</h3>
+        <p>Primary and secondary domain controller architecture with organized OUs, users, and security groups.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">📁</div>
+        <h3>File Server</h3>
+        <p>Shared folders for Students, Staff, and Instructors with Group Policy mapped network drives.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🌐</div>
+        <h3>IIS Web Server</h3>
+        <p>Custom website hosted internally and resolved using DNS for bickkky.uk and www.bickkky.uk.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🛡</div>
+        <h3>Security Controls</h3>
+        <p>Firewall segmentation, VLAN gateways, and role-based access across network and server resources.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">📡</div>
+        <h3>Wireless Access</h3>
+        <p>Access point integration prepared for managed administrative and guest wireless expansion.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">📬</div>
+        <h3>Mail Services</h3>
+        <p>Mail server role planned for domain-based user communication and infrastructure demonstration.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🧩</div>
+        <h3>VMware Clients</h3>
+        <p>Separate student, staff, and instructor workstations used to validate domain access and policies.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">📘</div>
+        <h3>Documentation</h3>
+        <p>GitHub-backed project structure for configs, screenshots, DNS, IIS, topology, and final submission assets.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="topology">
+    <h2 class="section-title">Network Topology Overview</h2>
+    <p class="section-sub">
+      The following structure summarizes the current school infrastructure deployment and service flow.
+    </p>
+<section class="section" id="topology">
+  <h2 class="section-title">Network Topology Overview</h2>
+  <p class="section-sub">
+    The following diagram represents the physical classroom and server-room infrastructure used in this deployment.
+  </p>
+
+  <div style="text-align:center;">
+    <img src="images/classroom_server_topology.png"
+         alt="School Network Topology"
+         style="max-width:100%; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.4);">
+  </div>
+
+  <div class="badges">
+    <div class="badge">VLAN Segmentation</div>
+    <div class="badge">Router-on-a-Stick</div>
+    <div class="badge">Firewall NAT Ready</div>
+    <div class="badge">DNS Integrated</div>
+    <div class="badge">GPO Automation</div>
+  </div>
+</section>
+   
+    <div class="badges">
+      <div class="badge">VLAN Segmentation</div>
+      <div class="badge">Router-on-a-Stick</div>
+      <div class="badge">Firewall NAT Ready</div>
+      <div class="badge">DNS Integrated</div>
+      <div class="badge">GPO Automation</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="split">
+      <div class="checklist" id="security">
+        <h2 class="section-title" style="font-size:26px;">Security & Operations</h2>
+        <ul>
+          <li>Domain-based authentication for users and administrators</li>
+          <li>Department-based access control using security groups</li>
+          <li>Mapped drive access restricted by OU and GPO</li>
+          <li>DNS-managed internal website resolution</li>
+          <li>Firewall and routing segmentation between VLANs</li>
+          <li>Scalable design for future HTTPS publishing</li>
+        </ul>
+      </div>
+
+      <div class="github-box" id="github">
+        <span class="github-badge">GitHub Project Integration</span>
+        <h2 class="section-title" style="font-size:26px;">Project Repository</h2>
+        <p class="section-sub" style="margin-bottom:18px;">
+          The complete project can include topology diagrams, switch/router configs, DNS records,
+          IIS screenshots, GPO evidence, and infrastructure documentation in GitHub for presentation and grading.
+        </p>
+        <a class="btn btn-primary" href="#" onclick="alert('Replace this button with your GitHub repository URL.'); return false;">Open GitHub Repository</a>
+        <div class="ssl-note">
+          Tip: Replace the button link with your actual GitHub project URL before presentation.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 bickkky.uk • Enterprise Network Infrastructure Capstone • Built by Bikramjit Singh
+  </footer>
+
+  <script>
+    function toggleTheme(){
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    }
+
+    (function(){
+      const savedTheme = localStorage.getItem('theme');
+      if(savedTheme === 'light'){
+        document.body.classList.add('light');
+      }
+    })();
+  </script>
 </body>
 </html>
